@@ -5,17 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class ViewProject extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_view_project);
     }
 
-    public void onCreateProjectButtonClick(View v){
-
-        Intent createProjectIntent = new Intent(this, AddProject.class);
-        startActivity(createProjectIntent);
+    public void onAddTaskCreate(View v){
+        Intent addTaskIntent = new Intent(this, AddTask.class);
+        startActivity(addTaskIntent);
     }
 }
