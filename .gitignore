@@ -209,5 +209,8 @@ Temporary Items
 # IDE
 .vscode
 
+# Other Added by Jessica
+google-services.json
+
 
 # End of https://www.gitignore.io/api/java,macos,android,androidstudio
