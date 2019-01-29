@@ -12,4 +12,6 @@ This Android application helps users manage projects. Each Project has a list of
 ## Daily Change Log
 - Day 1:
     - Create the Room database
-
+- Day 2:
+    - Scrap Day 1
+    - Build UI for application

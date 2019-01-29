@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="6dip"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/icon"
+        android:singleLine="true"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/firstLine"
+        android:layout_width="204dp"
+        android:layout_height="32dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@id/secondLine"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="96dp"
+        android:layout_toEndOf="@id/icon"
+        android:gravity="center_vertical"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="99dp"
+        android:layout_height="32dp"
+        android:layout_above="@+id/secondLine"
+        android:layout_alignEnd="@+id/secondLine"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginBottom="0dp"
+        android:lineSpacingExtra="18sp"
+        android:textSize="16sp" />
+
+</RelativeLayout>
