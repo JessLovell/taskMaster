@@ -2,12 +2,10 @@ package com.taskmaster.taskmaster;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private MyAdapter mAdapter;
+    private ProjectAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private static final String TAG = "MainActivity";
@@ -44,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        renderRecyclerView();
         updateRecyclerView();
 
     }
@@ -55,13 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
     }
 
-    public void onCreateProjectButtonClick(View v){
-
-        Intent createProjectIntent = new Intent(this, AddProject.class);
-        startActivity(createProjectIntent);
-    }
-
-    public void renderRecyclerView(){
+    public void updateRecyclerView(){
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -70,26 +60,46 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        mAdapter = new ProjectAdapter(new LinkedList<Project>());
+        recyclerView.setAdapter(mAdapter);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("projects")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
 
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("projects").get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//
-//                            LinkedList<Project> projects = new LinkedList<>();
-//                            for (QueryDocumentSnapshot document : task.getResult()){
-//                                Project p = document.toObject(Project.class);
-//                                projects.add(p);
-//                            }
-//                            // define an adapter
-//                            mAdapter = new MyAdapter(projects);
-//                            recyclerView.setAdapter(mAdapter);
-//                        }
-//                    }
-//                });
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d(TAG, "New project: " + dc.getDocument().getData());
+                                    mAdapter.add(dc.getDocument().toObject(Project.class));
+                                    break;
+                                case MODIFIED:
+                                    Log.d(TAG, "Modified project: " + dc.getDocument().getData());
+                                    //TODO: Update the project
+                                    mAdapter.update(dc.getDocument().toObject(Project.class));
+                                    break;
+                                case REMOVED:
+                                    Log.d(TAG, "Removed project: " + dc.getDocument().getData());
+                                    //TODO: Remove the project
+                                    break;
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    public void onCreateProjectButtonClick(View v){
+
+        Intent createProjectIntent = new Intent(this, AddProject.class);
+        startActivity(createProjectIntent);
     }
 
     public void onLoginButtonClick(View v){
@@ -127,49 +137,5 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         }
-    }
-
-    public void updateRecyclerView(){
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        mAdapter = new MyAdapter(new LinkedList<Project>());
-        recyclerView.setAdapter(mAdapter);
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("projects")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "listen:error", e);
-                            return;
-                        }
-
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    Log.d(TAG, "New project: " + dc.getDocument().getData());
-                                    mAdapter.add(dc.getDocument().toObject(Project.class));
-                                    break;
-                                case MODIFIED:
-                                    Log.d(TAG, "Modified project: " + dc.getDocument().getData());
-                                    //TODO: Update the project
-                                    break;
-                                case REMOVED:
-                                    Log.d(TAG, "Removed project: " + dc.getDocument().getData());
-                                    //TODO: Remove the project
-                                    break;
-                            }
-                        }
-
-                    }
-                });
     }
 }

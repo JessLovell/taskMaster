@@ -3,8 +3,6 @@ package com.taskmaster.taskmaster;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Database;
-import androidx.room.RoomDatabase;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.taskmaster.taskmaster.database.Project;
-import com.taskmaster.taskmaster.database.ProjectDao;
 
 
-// Code from : http://www.vogella.com/tutorials/AndroidRecyclerView/article.html
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHolder> {
     private List<Project> values;
 
     // Provide a reference to the views for each data item
@@ -43,19 +39,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         notifyItemInserted(values.size() - 1);
     }
 
+    public void update(Project project){
+        int index = values.indexOf(project);
+        values.set(index, project);
+        notifyDataSetChanged();
+    }
+
     public void remove(int position) {
         values.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Project> myDataset) {
+    public ProjectAdapter(List<Project> myDataset) {
         values = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public ProjectAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         // create a new view
         LayoutInflater inflater = LayoutInflater.from(
@@ -73,8 +75,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Project project = values.get(position);
-        holder.txtHeader.setText(project.title);
-        holder.txtFooter.setText(project.description);
+        holder.txtHeader.setText(project.getTitle());
+        holder.txtFooter.setText(project.getDescription());
+        holder.txtDate.setText(project.getPid());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

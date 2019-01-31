@@ -2,7 +2,6 @@ package com.taskmaster.taskmaster;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,22 +13,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.taskmaster.taskmaster.database.Project;
-import com.taskmaster.taskmaster.database.ProjectDatabase;
 
 public class AddProject extends AppCompatActivity {
 
-    private ProjectDatabase projectDatabase;
     private String TAG = "ProjectDatabase";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
-
-        // Maybe I need this later?
-//        projectDatabase = Room.databaseBuilder(getApplicationContext(),
-//                ProjectDatabase.class, "exercise_journal").allowMainThreadQueries().build();
     }
 
     public void onCreateProjectButtonClick(View v){
@@ -38,7 +30,7 @@ public class AddProject extends AppCompatActivity {
         EditText title = findViewById(R.id.editText);
         EditText description = findViewById(R.id.editText2);
 
-        Project newProject = new Project(title.getText().toString(), description.getText().toString());
+        final Project newProject = new Project(title.getText().toString(), description.getText().toString());
 
         // add to firebase cloud
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -47,7 +39,9 @@ public class AddProject extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        newProject.setPid(documentReference.getId());
+                        documentReference.set(newProject);
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + newProject.getPid());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -56,9 +50,6 @@ public class AddProject extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
-
-        // add to room database
-//        projectDatabase.projectDao().add(newProject);
 
         // redirect to the main page
         finish();
