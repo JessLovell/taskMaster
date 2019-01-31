@@ -53,12 +53,11 @@
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
             android:ems="10"
-            android:text="TextView"
+            android:paddingTop="8dp"
+            android:text="Project Title:"
             android:textAlignment="viewStart"
-            android:textSize="18sp"
-            tools:text="Project Title:" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editText"

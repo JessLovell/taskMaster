@@ -1,15 +1,14 @@
 package com.taskmaster.taskmaster.database;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import java.util.ArrayList;
 
-@Entity
 public class Project {
 
-    @PrimaryKey(autoGenerate = true)
-    public long id;
-    public String title;
-    public String description;
+    private String pid;
+    private String title;
+    private String description;
+    private ArrayList<String> tasks;
+
 
     public Project () {}
 
@@ -17,6 +16,7 @@ public class Project {
 
         this.title = title;
         this.description = description;
+        this.tasks = new ArrayList<>();
     }
 
     public String toString(){
@@ -30,5 +30,23 @@ public class Project {
 
     public String getDescription(){
         return this.description;
+    }
+
+    public ArrayList<String> getTasks(){
+        return this.tasks;
+    }
+
+    public boolean addTask(String taskId){
+
+        return tasks.add(taskId);
+    }
+
+    public Project setPid(String id){
+        this.pid = id;
+        return this;
+    }
+
+    public String getPid(){
+        return this.pid;
     }
 }

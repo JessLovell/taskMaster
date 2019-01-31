@@ -2,7 +2,6 @@ package com.taskmaster.taskmaster;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,21 +13,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.taskmaster.taskmaster.database.Project;
-import com.taskmaster.taskmaster.database.ProjectDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddProject extends AppCompatActivity {
 
-    private ProjectDatabase projectDatabase;
     private String TAG = "ProjectDatabase";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
-
-//        projectDatabase = Room.databaseBuilder(getApplicationContext(),
-//                ProjectDatabase.class, "exercise_journal").allowMainThreadQueries().build();
     }
 
     public void onCreateProjectButtonClick(View v){
@@ -37,7 +33,7 @@ public class AddProject extends AppCompatActivity {
         EditText title = findViewById(R.id.editText);
         EditText description = findViewById(R.id.editText2);
 
-        Project newProject = new Project(title.getText().toString(), description.getText().toString());
+        final Project newProject = new Project(title.getText().toString(), description.getText().toString());
 
         // add to firebase cloud
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -46,6 +42,11 @@ public class AddProject extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+
+                        //add the project Id to the document
+                        Map<String, Object> updateProjId = new HashMap<>();
+                        updateProjId.put("pid", documentReference.getId());
+                        documentReference.update(updateProjId);
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
@@ -55,9 +56,6 @@ public class AddProject extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
-
-        // add to room database
-//        projectDatabase.projectDao().add(newProject);
 
         // redirect to the main page
         finish();
