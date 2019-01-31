@@ -4,6 +4,8 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +76,36 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                 parent.getContext());
         View v =
                 inflater.inflate(R.layout.row_layout, parent, false);
+
+        // Adds an onClick listener
+        // https://stackoverflow.com/questions/13485918/android-onclick-listener-in-a-separate-class
+        v.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        TextView idView = v.findViewById(R.id.textView9);
+                        TextView titleView = v.findViewById(R.id.firstLine);
+                        String id = idView.getText().toString();
+                        String title = titleView.getText().toString();
+                        Log.i("Project Title", id + " " + title);
+                        goToProject(v, id, title);
+                    }
+                });
+
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
+    }
+
+    // Takes the user to the ProjectWithTasks activity
+    // https://stackoverflow.com/questions/4298225/how-can-i-start-an-activity-from-a-non-activity-class
+    public void goToProject(View v, String id, String title) {
+        Intent goToProjectWithTasksIntent = new Intent(v.getContext(), ViewProject.class);
+
+        // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application
+        goToProjectWithTasksIntent.putExtra("PROJECT_ID", id);
+        goToProjectWithTasksIntent.putExtra("PROJECT_TITLE", title);
+        v.getContext().startActivity(goToProjectWithTasksIntent);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
