@@ -27,6 +27,7 @@ public class AddProject extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
 
+        // Maybe I need this later?
 //        projectDatabase = Room.databaseBuilder(getApplicationContext(),
 //                ProjectDatabase.class, "exercise_journal").allowMainThreadQueries().build();
     }

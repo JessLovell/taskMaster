@@ -1,12 +1,16 @@
 package com.taskmaster.taskmaster;
 
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,21 +18,24 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.taskmaster.taskmaster.database.Project;
-import com.taskmaster.taskmaster.database.ProjectDatabase;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ProjectDatabase projectDatabase;
-    private List<Project> serverDatabase;
-
-
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private static final String TAG = "MainActivity";
 
     private static final int RC_SIGN_IN = 482;
 
@@ -37,15 +44,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        projectDatabase = Room.databaseBuilder(getApplicationContext(),
-                ProjectDatabase.class, "exercise_journal").allowMainThreadQueries().build();
 
-        renderRecyclerView();
+//        renderRecyclerView();
+        updateRecyclerView();
+
     }
 
     @Override
     protected void onRestart() {
-        renderRecyclerView();
         super.onRestart();
     }
 
@@ -57,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void renderRecyclerView(){
 
-        projectDatabase = Room.databaseBuilder(getApplicationContext(),
-                ProjectDatabase.class, "exercise_journal").allowMainThreadQueries().build();
-
-        //Add the external database to the local database
-//        serverDatabase.addAll(projectDatabase.projectDao().getAll());
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
@@ -70,9 +70,26 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // define an adapter
-        mAdapter = new MyAdapter(projectDatabase.projectDao().getAll());
-        recyclerView.setAdapter(mAdapter);
+
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("projects").get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//
+//                            LinkedList<Project> projects = new LinkedList<>();
+//                            for (QueryDocumentSnapshot document : task.getResult()){
+//                                Project p = document.toObject(Project.class);
+//                                projects.add(p);
+//                            }
+//                            // define an adapter
+//                            mAdapter = new MyAdapter(projects);
+//                            recyclerView.setAdapter(mAdapter);
+//                        }
+//                    }
+//                });
     }
 
     public void onLoginButtonClick(View v){
@@ -110,5 +127,49 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         }
+    }
+
+    public void updateRecyclerView(){
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        mAdapter = new MyAdapter(new LinkedList<Project>());
+        recyclerView.setAdapter(mAdapter);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("projects")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d(TAG, "New project: " + dc.getDocument().getData());
+                                    mAdapter.add(dc.getDocument().toObject(Project.class));
+                                    break;
+                                case MODIFIED:
+                                    Log.d(TAG, "Modified project: " + dc.getDocument().getData());
+                                    //TODO: Update the project
+                                    break;
+                                case REMOVED:
+                                    Log.d(TAG, "Removed project: " + dc.getDocument().getData());
+                                    //TODO: Remove the project
+                                    break;
+                            }
+                        }
+
+                    }
+                });
     }
 }

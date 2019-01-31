@@ -38,9 +38,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    public void add(int position, Project project) {
-        values.add(position, project);
-        notifyItemInserted(position);
+    public void add(Project project) {
+        values.add(project);
+        notifyItemInserted(values.size() - 1);
     }
 
     public void remove(int position) {
