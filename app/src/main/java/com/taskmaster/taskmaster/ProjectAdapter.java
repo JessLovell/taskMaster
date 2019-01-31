@@ -40,14 +40,24 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
     }
 
     public void update(Project project){
-        int index = values.indexOf(project);
-        values.set(index, project);
+
+        for (Project p : values){
+            if (p.getTitle() == project.getTitle()){
+                int index = values.indexOf(p);
+                values.set(index, project);
+            }
+        }
         notifyDataSetChanged();
     }
 
-    public void remove(int position) {
-        values.remove(position);
-        notifyItemRemoved(position);
+    public void remove(String pid) {
+
+        for (Project p : values){
+            if (p.getPid() == pid){
+                values.remove(values.indexOf(p));
+                notifyItemRemoved(values.indexOf(p));
+            }
+        }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)

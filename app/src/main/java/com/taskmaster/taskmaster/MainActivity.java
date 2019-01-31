@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
+
         super.onRestart();
     }
 
@@ -82,12 +83,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case MODIFIED:
                                     Log.d(TAG, "Modified project: " + dc.getDocument().getData());
-                                    //TODO: Update the project
                                     mAdapter.update(dc.getDocument().toObject(Project.class));
                                     break;
                                 case REMOVED:
                                     Log.d(TAG, "Removed project: " + dc.getDocument().getData());
-                                    //TODO: Remove the project
                                     break;
                             }
                         }
