@@ -43,10 +43,6 @@ public class AddProject extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
 
-                        //add the project Id to the document
-                        Map<String, Object> updateProjId = new HashMap<>();
-                        updateProjId.put("pid", documentReference.getId());
-                        documentReference.update(updateProjId);
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })

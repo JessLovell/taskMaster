@@ -28,11 +28,6 @@ public class ViewProject extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_project);
-    }
-
-    public void onAddTaskCreate(View v){
-        Intent addTaskIntent = new Intent(this, AddTask.class);
-        startActivity(addTaskIntent);
 
         // Gets project id and title from the intent that directed the user to this activity
         // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application
@@ -40,7 +35,7 @@ public class ViewProject extends AppCompatActivity {
         projectTitle = getIntent().getStringExtra("PROJECT_TITLE");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("projects").document("9J5HcPe7kwuKOkJlsu4k");
+        DocumentReference docRef = db.collection("projects").document(projectId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -49,6 +44,9 @@ public class ViewProject extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         projectToDisplay = document.toObject(Project.class);
+
+                        TextView title = findViewById(R.id.textView3);
+                        title.setText(projectToDisplay.getTitle());
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -58,7 +56,11 @@ public class ViewProject extends AppCompatActivity {
             }
         });
 
-        TextView title = findViewById(R.id.textView3);
-        title.setText(projectToDisplay.getTitle());
+
+    }
+
+    public void onAddTaskCreate(View v){
+        Intent addTaskIntent = new Intent(this, AddTask.class);
+        startActivity(addTaskIntent);
     }
 }
