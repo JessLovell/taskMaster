@@ -12,7 +12,7 @@ This Android application helps users manage projects. Each Project has a list of
  :no_good: | **Sort Task** | Users should be able to sort the tasks assigned to them based on the title of the task, the state the task is in, or the person who assigned the task to them. This sorting should be done in the cloud, to avoid using too many resources on the user’s phone.
  :no_good: | **Accessibility** | Any iconography in your app should be well-labeled with a contentDescription. Use the hint attribute on all editable elements in your app, or labelFor to allow a TextView to serve as a label. Use the focusable attribute to show that a particular ViewGroup consists of one piece of data.
  :no_good: | **Testing** | Test manually using TalkBack to ensure your app is navigable through that interface. Use the Accessibility Scanner to run automated testing. Use the “Share Results” dialog to send yourself the zip file, and include those screenshots/results in your README. Enable AccessibilityChecks on your existing Espresso tests.
- :no_good: | **Package** | Build an .apk file that can be directly installed on a device. Include that file in your repo, linked from your README.
+ :ok_woman: | **Package** | Build an .apk file that can be directly installed on a device. Include that file in your repo, linked from your README.
 
 
 
@@ -40,3 +40,4 @@ This Android application helps users manage projects. Each Project has a list of
     - Link to Project View and Task Create
 - Day 5:
     - Tie up some loose ends
+    - Generate APK

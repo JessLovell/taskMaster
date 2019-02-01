@@ -14,8 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.taskmaster.taskmaster.database.Project;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddProject extends AppCompatActivity {
 

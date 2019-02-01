@@ -1,9 +1,5 @@
 package com.taskmaster.taskmaster;
 
-import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.taskmaster.taskmaster.database.Project;
+import com.taskmaster.taskmaster.database.ProjectTask;
+
+import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
-public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHolder> {
-    private List<Project> values;
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
+
+    private List<ProjectTask> values;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -36,41 +37,36 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         }
     }
 
-    public void add(Project project) {
-        values.add(project);
+    public void add(ProjectTask task) {
+        values.add(task);
         notifyItemInserted(values.size() - 1);
     }
 
-    public void update(Project project){
+    public void update(ProjectTask task){
 
-        for (Project p : values){
-            if (p.getTitle() == project.getTitle()){
-                int index = values.indexOf(p);
-                values.set(index, project);
+        for (ProjectTask t : values){
+            if (t.getTitle() == task.getTitle()){
+                int index = values.indexOf(t);
+                values.set(index, task);
             }
         }
         notifyDataSetChanged();
     }
 
+    // Provide a suitable constructor (depends on the kind of dataset)
+
+    //TODO: Change from Project Id to task id
     public void remove(String pid) {
 
-        for (Project p : values){
-            if (p.getPid() == pid){
-                values.remove(values.indexOf(p));
-                notifyItemRemoved(values.indexOf(p));
-            }
-        }
     }
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public ProjectAdapter(List<Project> myDataset) {
+    public TaskAdapter(List<ProjectTask> myDataset) {
         values = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ProjectAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                        int viewType) {
         // create a new view
         LayoutInflater inflater = LayoutInflater.from(
                 parent.getContext());
@@ -84,38 +80,36 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                     @Override
                     public void onClick(final View v) {
                         TextView idView = v.findViewById(R.id.textView9);
-                        TextView titleView = v.findViewById(R.id.firstLine);
                         String id = idView.getText().toString();
-                        String title = titleView.getText().toString();
-                        Log.i("Project Title", id + " " + title);
-                        goToProject(v, id, title);
+                        Log.i("Task Title", id);
+                        goToTask(v, id);
                     }
                 });
 
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
+        TaskAdapter.ViewHolder vh = new TaskAdapter.ViewHolder(v);
         return vh;
     }
 
     // Takes the user to the ProjectWithTasks activity
     // https://stackoverflow.com/questions/4298225/how-can-i-start-an-activity-from-a-non-activity-class
-    public void goToProject(View v, String id, String title) {
-        Intent goToProjectWithTasksIntent = new Intent(v.getContext(), ViewProject.class);
+    public void goToTask(View v, String id) {
+        Intent goToTaskWithTasksIntent = new Intent(v.getContext(), ViewTask.class);
 
         // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application
-        goToProjectWithTasksIntent.putExtra("PROJECT_ID", id);
-        v.getContext().startActivity(goToProjectWithTasksIntent);
+        goToTaskWithTasksIntent.putExtra("TASK_ID", id);
+        v.getContext().startActivity(goToTaskWithTasksIntent);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(TaskAdapter.ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final Project project = values.get(position);
-        holder.txtHeader.setText(project.getTitle());
-        holder.txtFooter.setText(project.getDescription());
-        holder.txtDate.setText(project.getPid());
+        final ProjectTask task = values.get(position);
+        holder.txtHeader.setText(task.getTitle());
+        holder.txtFooter.setText(task.getDescription());
+        holder.txtDate.setText(task.getTid());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
