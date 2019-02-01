@@ -47,6 +47,7 @@ public class ViewProject extends AppCompatActivity {
         // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application
         projectId = getIntent().getStringExtra("PROJECT_ID");
 
+        //Get the unique project and render the info on the page
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("projects").document(projectId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -101,6 +102,7 @@ public class ViewProject extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("tasks")
+//                .whereEqualTo(projectId, projectId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
