@@ -102,7 +102,7 @@ public class ViewProject extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("tasks")
-//                .whereEqualTo(projectId, projectId)
+                .whereEqualTo("projectId", projectId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
