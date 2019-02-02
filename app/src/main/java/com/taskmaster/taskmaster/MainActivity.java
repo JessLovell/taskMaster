@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         updateRecyclerView();
-
     }
 
     @Override
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                             switch (dc.getType()) {
                                 case ADDED:
                                     Log.d(TAG, "New project: " + dc.getDocument().getData());
-                                    mAdapter.add(dc.getDocument().toObject(Project.class));
+                                    mAdapter.add(dc.getDocument().toObject(Project.class).setPid(dc.getDocument().getId()));
                                     break;
                                 case MODIFIED:
                                     Log.d(TAG, "Modified project: " + dc.getDocument().getData());

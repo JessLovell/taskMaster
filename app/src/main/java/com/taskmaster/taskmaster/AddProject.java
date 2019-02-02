@@ -14,8 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.taskmaster.taskmaster.database.Project;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddProject extends AppCompatActivity {
 
@@ -43,10 +41,6 @@ public class AddProject extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
 
-                        //add the project Id to the document
-                        Map<String, Object> updateProjId = new HashMap<>();
-                        updateProjId.put("pid", documentReference.getId());
-                        documentReference.update(updateProjId);
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
