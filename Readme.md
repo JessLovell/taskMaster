@@ -16,14 +16,17 @@ This Android application helps users manage projects. Each Project has a list of
 
 
 
- ![Main Page Screenshot](./screenshots/main.png)
  ![Login Page Screenshot](./screenshots/login.png)
+ ![Main Page Screenshot](./screenshots/main.png)
  ![Create Project Screenshot](./screenshots/project-create.png)
+ ![View Project Screenshot](./screenshots/project-view.png)
  ![Create Task Screenshot](./screenshots/task-create.png)
+ ![View Task Screenshot](./screenshots/task-view.png)
 
 ## Resources
 - [Using Firebase](https://firebase.google.com/docs/android/setup)
 - [Auth with Firebase](https://firebase.google.com/docs/auth/?utm_source=studio)
+- [Launch with SingleTop](https://stackoverflow.com/questions/25240862/android-keep-previously-added-intent-extra-when-going-up-to-parent-activity)
 
 
 ## Daily Change Log
@@ -42,4 +45,4 @@ This Android application helps users manage projects. Each Project has a list of
     - Generate APK
     - Add a task to a project
     - Render it to the recycle view
-    
+    - View a task! :woman_cartwheeling:

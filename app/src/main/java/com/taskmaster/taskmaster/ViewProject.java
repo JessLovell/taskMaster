@@ -84,8 +84,6 @@ public class ViewProject extends AppCompatActivity {
 
         addTaskIntent.putExtra("PROJECT_ID", projectId);
         startActivity(addTaskIntent);
-
-
     }
 
     public void updateTaskRecyclerView(){
