@@ -34,10 +34,12 @@ This Android application helps users manage projects. Each Project has a list of
     - Build UI for application
 - Day 3:
     - firebase Login/SignUp
-    - pull data from Database
+    - pull project data from Database
 - Day 4:
     - Update Project Recycler View when db is updated
-    - Link to Project View and Task Create
+    - Link to Project View and Create Task
 - Day 5:
-    - Tie up some loose ends
     - Generate APK
+    - Add a task to a project
+    - Render it to the recycle view
+    
