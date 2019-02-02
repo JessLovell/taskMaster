@@ -19,6 +19,7 @@ This Android application helps users manage projects. Each Project has a list of
  ![Login Page Screenshot](./screenshots/login.png)
  ![Main Page Screenshot](./screenshots/main.png)
  ![Create Project Screenshot](./screenshots/project-create.png)
+ 
  ![View Project Screenshot](./screenshots/project-view.png)
  ![Create Task Screenshot](./screenshots/task-create.png)
  ![View Task Screenshot](./screenshots/task-view.png)
