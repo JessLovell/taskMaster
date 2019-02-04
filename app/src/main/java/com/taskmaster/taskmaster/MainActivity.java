@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
@@ -37,12 +38,42 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 482;
 
+    private static FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        updateRecyclerView();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            setContentView(R.layout.activity_main);
+
+            TextView showName = findViewById(R.id.textView);
+            showName.setText(user.getDisplayName() + "'s Projects");
+            updateRecyclerView();
+
+            Log.i(TAG, user.toString());
+
+        } else {
+            // No user is signed in
+            // Direct them to Login
+            Log.i(TAG, "About to launch sign in");
+            // Choose authentication providers
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build());
+
+            // Create and launch sign-in intent
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+
+            Log.i(TAG, "Intent Sent");
+        }
+
     }
 
     @Override
@@ -100,21 +131,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(createProjectIntent);
     }
 
-    public void onLoginButtonClick(View v){
-
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -124,10 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                // Render the page with projects
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                setContentView(R.layout.activity_main);
                 TextView showName = findViewById(R.id.textView);
-                showName.setText(user.getDisplayName());
-                // ...
+                showName.setText(user.getDisplayName() + "'s Projects");
+                updateRecyclerView();
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -135,5 +154,11 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         }
+    }
+
+    public void onViewAllTaskButtonClick(View v) {
+
+        Intent intent = new Intent(this, AllTask.class);
+        startActivity(intent);
     }
 }

@@ -8,15 +8,17 @@ public class Project {
     private String title;
     private String description;
     private ArrayList<String> tasks;
+    private String creatorId;
 
 
     public Project () {}
 
-    public Project (String title, String description) {
+    public Project (String title, String description, String creatorId) {
 
         this.title = title;
         this.description = description;
         this.tasks = new ArrayList<>();
+        this.creatorId = creatorId;
     }
 
     public String toString(){
@@ -44,6 +46,10 @@ public class Project {
     public Project setPid(String id){
         this.pid = id;
         return this;
+    }
+
+    public String getCreatorId() {
+        return this.creatorId;
     }
 
     public String getPid(){

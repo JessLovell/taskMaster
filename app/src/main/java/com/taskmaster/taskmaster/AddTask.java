@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +28,8 @@ public class AddTask extends AppCompatActivity {
     private String projectId;
     private Project projectToUpdate;
     private String newTaskId;
+    private static FirebaseUser user;
+
 
 
     @Override
@@ -34,6 +38,7 @@ public class AddTask extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
 
         projectId = getIntent().getStringExtra("PROJECT_ID");
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public void onCreateTaskButtonClick(View V){
@@ -42,7 +47,7 @@ public class AddTask extends AppCompatActivity {
         EditText title = findViewById(R.id.editText3);
         EditText description = findViewById(R.id.editText4);
 
-        final ProjectTask newTask = new ProjectTask(title.getText().toString(), description.getText().toString(), projectId);
+        final ProjectTask newTask = new ProjectTask(title.getText().toString(), description.getText().toString(), projectId, user.getUid());
 
         // add to firebase cloud
         FirebaseFirestore db = FirebaseFirestore.getInstance();

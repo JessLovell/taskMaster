@@ -7,16 +7,22 @@ public class ProjectTask {
     private String description;
     private String status;
     private String projectId;
+    private String creatorId;
+    private String assignedToId;
 
      public ProjectTask(){ }
 
-     public ProjectTask(String title, String description, String projectId){
+     public ProjectTask(String title, String description, String projectId, String creatorId){
          this.title= title;
          this.description = description;
          this.status = "Available";
          this.projectId = projectId;
+         this.creatorId = creatorId;
      }
 
+     public String getCreatorId(){
+         return this.creatorId;
+     }
      public String getTitle(){
          return this.title;
      }
@@ -54,5 +60,13 @@ public class ProjectTask {
      public ProjectTask setTid(String id) {
          this.tid = id;
          return this;
+     }
+
+     public String setAssingedTo(String id){
+        return this.assignedToId = id;
+     }
+
+     public String getAssignedToId() {
+         return this.assignedToId;
      }
 }
